@@ -5,7 +5,7 @@ import numpy as np
 
 train_ids=[]
 val_ids=[]
-enc = tiktoken.get_encoding("gpt2")
+enc = tiktoken.get_encoding("cl100k_base")
 
 def download_file(url):
   response = requests.get(url)
@@ -62,8 +62,13 @@ for filename in os.listdir('output'):
 
 print(f"train has {len(train_ids):,} tokens")
 print(f"val has {len(val_ids):,} tokens")
-train_ids = np.array(train_ids, dtype=np.uint16)
-val_ids = np.array(val_ids, dtype=np.uint16)
-train_ids.tofile(os.path.join(os.path.dirname(__file__), 'train.bin'))
-val_ids.tofile(os.path.join(os.path.dirname(__file__), 'val.bin'))
+# train_ids = np.array(train_ids, dtype=np.uint16)
+# val_ids = np.array(val_ids, dtype=np.uint16)
+train_ids = np.array(train_ids, dtype=np.uint32)  # uint16 -> uint32
+val_ids = np.array(val_ids, dtype=np.uint32)      # uint16 -> uint32
+# train_ids.tofile(os.path.join(os.path.dirname(__file__), 'train3.bin'))
+# val_ids.tofile(os.path.join(os.path.dirname(__file__), 'val3.bin'))
+data_dir = "/home/byounggun/nanoChatGPT/data/Chat"
+train_data = np.memmap(os.path.join(data_dir, 'train3.bin'), dtype=np.uint32, mode='r')
+val_data = np.memmap(os.path.join(data_dir, 'val3.bin'), dtype=np.uint32, mode='r')
 
