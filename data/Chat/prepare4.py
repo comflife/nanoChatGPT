@@ -59,9 +59,17 @@ for filename in os.listdir('output'):
 print(f"train has {len(train_ids):,} tokens")
 print(f"val has {len(val_ids):,} tokens")
 
+# save the meta information as well, to help us encode/decode later
+meta = {
+    'vocab_size': enc.n_vocab,
+}
+data_dir = os.path.dirname(__file__)
+with open(os.path.join(data_dir, 'meta.pkl'), 'wb') as f:
+    import pickle
+    pickle.dump(meta, f)
+
 train_ids = np.array(train_ids, dtype=np.uint32)
 val_ids = np.array(val_ids, dtype=np.uint32)
 
-data_dir = os.path.dirname(__file__)
 train_ids.tofile(os.path.join(data_dir, 'train4.bin'))
 val_ids.tofile(os.path.join(data_dir, 'val4.bin'))

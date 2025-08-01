@@ -11,7 +11,7 @@ import requests
 
 # -----------------------------------------------------------------------------
 init_from = 'resume'
-out_dir = 'out-chat' # where finetuned model lives
+out_dir = 'out' # where finetuned model lives
 num_samples = 1 # no samples. 1 for 1 chat at a time
 max_new_tokens = 100
 temperature = 0.8 
@@ -40,9 +40,9 @@ def download_ckpt(url):
 # gets model
 # init from a model saved in a specific directory
 if init_from == 'huggingface':
-  if os.path.isfile('ckpt.pt'):
+  if os.path.isfile('/home/byounggun/nanoChatGPT/out/ckpt.pt'):
     # init from huggingface model
-    ckpt_path = 'ckpt.pt'
+    ckpt_path = '/home/byounggun/nanoChatGPT/out/ckpt.pt'
     checkpoint = torch.load(ckpt_path, map_location=device)
     gptconf = GPTConfig(**checkpoint['model_args'])
     model = GPT(gptconf)
@@ -54,7 +54,7 @@ if init_from == 'huggingface':
     model.load_state_dict(state_dict) 
   else:
     # init from huggingface model
-    download_ckpt('https://huggingface.co/VatsaDev/ChatGpt-nano/resolve/main/ckpt.pt')
+    # download_ckpt('https://huggingface.co/VatsaDev/ChatGpt-nano/resolve/main/ckpt.pt')
     ckpt_path = 'ckpt.pt'
     checkpoint = torch.load(ckpt_path, map_location=device)
     gptconf = GPTConfig(**checkpoint['model_args'])
