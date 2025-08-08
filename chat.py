@@ -1,5 +1,7 @@
 """
 Chat with a trained model
+
+python chat.py --out_dir=out --context="hello how are you"
 """
 import os
 import pickle
@@ -32,7 +34,7 @@ ctx = nullcontext() if device_type == 'cpu' else torch.amp.autocast(device_type=
 def download_ckpt(url):
   response = requests.get(url)
   if response.status_code == 200:
-    with open('ckpt.pt', 'wb') as f:
+    with open('ckpt_1.pt', 'wb') as f:
       f.write(response.content)
   else:
     print('Error downloading file:', response.status_code)
@@ -40,9 +42,9 @@ def download_ckpt(url):
 # gets model
 # init from a model saved in a specific directory
 if init_from == 'huggingface':
-  if os.path.isfile('/home/byounggun/nanoChatGPT/out/ckpt.pt'):
+  if os.path.isfile('/home/byounggun/nanoChatGPT/out/ckpt_1.pt'):
     # init from huggingface model
-    ckpt_path = '/home/byounggun/nanoChatGPT/out/ckpt.pt'
+    ckpt_path = '/home/byounggun/nanoChatGPT/out/ckpt_1.pt'
     checkpoint = torch.load(ckpt_path, map_location=device)
     gptconf = GPTConfig(**checkpoint['model_args'])
     model = GPT(gptconf)
@@ -66,7 +68,7 @@ if init_from == 'huggingface':
             state_dict[k[len(unwanted_prefix):]] = state_dict.pop(k)
     model.load_state_dict(state_dict) 
 elif init_from == 'resume':
-    ckpt_path = os.path.join(out_dir, 'ckpt.pt')
+    ckpt_path = os.path.join(out_dir, 'ckpt_1.pt')
     checkpoint = torch.load(ckpt_path, map_location=device)
     gptconf = GPTConfig(**checkpoint['model_args'])
     model = GPT(gptconf)
